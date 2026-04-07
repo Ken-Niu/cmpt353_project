@@ -9,8 +9,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-    postgres_data:
-    uploads_data:
+      - postgres_data:/var/lib/postgresql/data
+
   app:
     build: .
     ports:
@@ -19,8 +19,11 @@ services:
       DATABASE_URL: postgresql://user:password@db:5432/cmpt370
       NEXTAUTH_SECRET: supersecretkey
       NEXTAUTH_URL: http://localhost:3000
+    volumes:
+      - uploads_data:/app/public/uploads
     depends_on:
       - db
 
 volumes:
   postgres_data:
+  uploads_data:

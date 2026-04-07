@@ -5,7 +5,7 @@ import { getCurrentUser } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp']
-const MAX_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_SIZE = 5 * 1024 * 1024
 
 export async function POST(req: NextRequest) {
   const user = await getCurrentUser()
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       targetId,
       mimeType: file.type,
       sizeBytes: file.size,
-      path: `/uploads/${filename}`,
+      path: `/api/upload/${filename}`,
       postId: targetType === 'post' ? targetId : null,
       replyId: targetType === 'reply' ? targetId : null,
     }
