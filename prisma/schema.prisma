@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  displayName  String
+  passwordHash String
+  role         String    @default("user")
+  createdAt    DateTime  @default(now())
+  posts        Post[]
+  replies      Reply[]
+  votes        Vote[]
+  channels     Channel[]
+}
+
+model Channel {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  createdBy   String
+  creator     User     @relation(fields: [createdBy], references: [id])
+  posts       Post[]
+}
+
+model Post {
+  id          String       @id @default(cuid())
+  title       String
+  body        String
+  createdAt   DateTime     @default(now())
+  channelId   String
+  channel     Channel      @relation(fields: [channelId], references: [id])
+  authorId    String
+  author      User         @relation(fields: [authorId], references: [id])
+  replies     Reply[]
+  votes       Vote[]
+  attachments Attachment[]
+}
+
+model Reply {
+  id            String       @id @default(cuid())
+  body          String
+  createdAt     DateTime     @default(now())
+  postId        String
+  post          Post         @relation(fields: [postId], references: [id])
+  authorId      String
+  author        User         @relation(fields: [authorId], references: [id])
+  parentReplyId String?
+  parentReply   Reply?       @relation("ReplyToReply", fields: [parentReplyId], references: [id])
+  childReplies  Reply[]      @relation("ReplyToReply")
+  votes         Vote[]
+  attachments   Attachment[]
+}
+
+model Vote {
+  id         String  @id @default(cuid())
+  value      Int
+  userId     String
+  user       User    @relation(fields: [userId], references: [id])
+  targetType String
+  targetId   String
+  postId     String?
+  post       Post?   @relation(fields: [postId], references: [id])
+  replyId    String?
+  reply      Reply?  @relation(fields: [replyId], references: [id])
+  @@unique([userId, targetType, targetId])
+}
+
+model Attachment {
+  id         String  @id @default(cuid())
+  targetType String
+  targetId   String
+  mimeType   String
+  sizeBytes  Int
+  path       String
+  postId     String?
+  post       Post?   @relation(fields: [postId], references: [id])
+  replyId    String?
+  reply      Reply?  @relation(fields: [replyId], references: [id])
+}

@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Channel-Based Programming Q&A Tool
 
-## Getting Started
+A full-stack web application for programming questions and threaded discussions.
 
-First, run the development server:
+## Tech Stack
+- Next.js 16 (App Router), React, TypeScript, Tailwind CSS
+- PostgreSQL 16 with Prisma ORM
+- JWT Authentication with httpOnly cookies, bcrypt password hashing
+- Docker + Docker Compose
+
+## Quick Start (Docker)
+
+### Prerequisites
+- Docker and Docker Compose installed
+
+### Run Steps
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Clone the repository
+git clone <your-repo-url>
+cd cmpt353_project
+
+# 2. Start the application
+docker compose up --build
+
+# 3. Open the application
+# Visit http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Ports
+- App: http://localhost:3000
+- PostgreSQL: localhost:5432
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Admin Credentials
+- Email: admin@example.com
+- Password: admin123
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Test User Credentials
+- Email: user@example.com
+- Password: user123
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+See `.env.example` for all required variables:
+- `DATABASE_URL` - PostgreSQL connection string
+- `NEXTAUTH_SECRET` - Secret key for JWT token signing
+- `NEXTAUTH_URL` - Application URL
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Features
+- Browse and create channels
+- Post questions and messages in channels
+- Reply to posts and replies (threaded)
+- Attach screenshots to posts/replies
+- Vote (thumbs up/down) on posts and replies
+- Search across content and users
+- Admin panel for moderation
