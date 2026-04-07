@@ -17,7 +17,7 @@ A full-stack web application for programming questions and threaded discussions.
 
 ```bash
 # 1. Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/Ken-Niu/cmpt353_project.git
 cd cmpt353_project
 
 # 2. Start the application
