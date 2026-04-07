@@ -8,8 +8,9 @@ type Reply = {
   id: string
   body: string
   createdAt: string
+  authorId: string
   author: { displayName: string }
-  votes: { value: number }[]
+  votes: { value: number; userId: string }[]
   childReplies: Reply[]
   attachments: { id: string; path: string }[]
 }
@@ -49,10 +50,12 @@ function ReplyItem({ reply, postId, onReplyAdded, depth = 0 }: {
   }
 
   const vote = async (value: number) => {
+    const currentVote = reply.votes.find(v => v.userId === user?.id)
+    const newValue = currentVote?.value === value ? 0 : value
     await fetch('/api/votes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ targetType: 'reply', targetId: reply.id, value })
+      body: JSON.stringify({ targetType: 'reply', targetId: reply.id, value: newValue })
     })
     onReplyAdded()
   }
@@ -78,7 +81,7 @@ function ReplyItem({ reply, postId, onReplyAdded, depth = 0 }: {
               <span>{score}</span>
               <button onClick={() => vote(-1)} className="hover:text-red-600">▼</button>
               <button onClick={() => setShowForm(!showForm)} className="hover:text-blue-600">Reply</button>
-              {user.role === 'admin' && (
+              {(user.role === 'admin' || user.id === reply.authorId) && (
                 <button onClick={deleteReply} className="text-red-600 hover:underline">Delete</button>
               )}
             </>
@@ -146,10 +149,12 @@ export default function PostPage() {
   }
 
   const vote = async (value: number) => {
+    const currentVote = post?.votes.find(v => v.userId === user?.id)
+    const newValue = currentVote?.value === value ? 0 : value
     await fetch('/api/votes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ targetType: 'post', targetId: id, value })
+      body: JSON.stringify({ targetType: 'post', targetId: id, value: newValue })
     })
     loadPost()
   }
