@@ -40,6 +40,9 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id:
   if (user.role !== 'admin' && post.authorId !== user.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
+  await prisma.vote.deleteMany({ where: { postId: id } })
+  await prisma.attachment.deleteMany({ where: { postId: id } })
+  await prisma.reply.deleteMany({ where: { postId: id } })
   await prisma.post.delete({ where: { id } })
   return NextResponse.json({ success: true })
 }
